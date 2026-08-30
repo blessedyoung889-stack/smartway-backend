@@ -10,9 +10,20 @@ const PORT = process.env.PORT || 10000;
 app.use(cors());
 app.use(express.json());
 
-// Root Route (Fixes "Cannot GET /")
+// Base live API URL variable for your reference:
+// https://smartway-backend-1.onrender.com
+
+// Root Route (Displays live status)
 app.get('/', (req, res) => {
   res.send('SmartWay Backend is running successfully!');
+});
+
+// Example API Route
+app.get('/api/status', (req, res) => {
+  res.json({
+    status: 'online',
+    message: 'Backend API is connected to Render successfully.'
+  });
 });
 
 // MongoDB Connection
