@@ -1,4 +1,4 @@
-package.json{
+{
   "name": "smartway-backend",
   "version": "1.0.0",
   "description": "SmartWay Backend API",
