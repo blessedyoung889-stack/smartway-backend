@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Way - Digi Register</title>
+    <style>
+/* ==========================================================================
+   GLOBAL STYLES & RESET
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: #a3e635; /* Bright neon/lime green */
+    color: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Visibility Control Classes */
+.portal-section {
+    display: none; /* Hidden until user logs in */
+}
+
+.portal-section.active {
+    display: block;
+}
+
+.auth-mode-hidden {
+    display: none !important;
+}
+
+/* ==========================================================================
+   HERO / LANDING SECTION (NEON LIME + WAVE MESH)
+   ========================================================================== */
+#landing-section {
+    position: relative;
+    background-color: #a3e635;
+    padding: 60px 40px;
+    margin: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    border-radius: 40px;
+    overflow: hidden;
+}
+
+#landing-section::before,
+#landing-section::after {
+    content: "";
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+#landing-section::before {
+    bottom: -150px;
+    left: -150px;
+    background: radial-gradient(circle, transparent 20%, rgba(255,255,255,0.2) 21%, transparent 22%),
+                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.3) 0px, rgba(255, 255, 255, 0.3) 2px, transparent 2px, transparent 12px),
+                repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.2) 0px, rgba(0, 0, 0, 0.2) 2px, transparent 2px, transparent 12px);
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    transform: rotate(15deg);
+}
+
+#landing-section::after {
+    top: -150px;
+    right: -150px;
+    background: repeating-linear-gradient(60deg, rgba(255, 255, 255, 0.4) 0px, rgba(255, 255, 255, 0.4) 1px, transparent 1px, transparent 15px),
+                repeating-linear-gradient(-30deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 15px);
+    border-radius: 50%;
+}
+
+.top-home-header {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.top-home-header h1 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #ffffff;
+    display: inline-block;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #ffffff;
+    text-transform: uppercase;
+}
+
+.hero-main-title {
+    text-align: center;
+    margin: 40px 0 20px 0;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-main-title .smart-light {
+    font-weight: 300;
+    font-size: 2.5rem;
+    color: #ffffff;
+}
+
+.hero-main-title .way-bold {
+    font-weight: 900;
+    font-size: 4.5rem;
+    color: #ffffff;
+    letter-spacing: 3px;
+    display: block;
+    line-height: 1;
+}
+
+.hero-slogan {
+    text-align: center;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 1.4rem;
+    margin-bottom: 25px;
+    position: relative;
+    z-index: 2;
+}
+
+.digi-subtitle {
+    text-align: center;
+    font-size: 1.8rem;
+    color: #111827;
+    font-weight: 800;
+    margin-top: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.digi-paragraph {
+    max-width: 700px;
+    margin: 10px auto 40px auto;
+    text-align: center;
+    font-size: 1rem;
+    color: #1f2937;
+    line-height: 1.6;
+    position: relative;
+    z-index: 2;
+}
+
+/* ==========================================================================
+   LOGIN FORM — SPLIT SCREEN
+   ========================================================================== */
+.login-split-card {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #ffffff;
+    border-radius: 30px;
+    overflow: hidden;
+    margin: 40px 0;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    position: relative;
+    z-index: 2;
+}
+
+.login-left-panel {
+    flex: 1;
+    min-width: 320px;
+    background-color: #84cc16;
+    padding: 50px 40px;
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-left-panel h2 {
+    font-size: 3rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.login-left-panel .slogan {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+.login-left-panel .main-msg {
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1.3;
+}
+
+.login-right-panel {
+    flex: 1;
+    min-width: 320px;
+    padding: 50px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-right-panel h3 {
+    color: #65a30d;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 25px;
+}
+
+.login-right-panel label {
+    font-weight: 700;
+    color: #374151;
+    margin-top: 15px;
+    display: block;
+}
+
+.login-right-panel input, .login-right-panel select {
+    width: 100%;
+    padding: 14px 20px;
+    border: 2px solid #e5e7eb;
+    border-radius: 30px;
+    margin-top: 6px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.login-right-panel button {
+    margin-top: 25px;
+    background-color: #65a30d;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* ==========================================================================
+   ADMIN ACCOUNT CREATION SECTION
+   ========================================================================== */
+.admin-create-wrapper {
+    background-color: #e0f2fe;
+    border-radius: 30px;
+    padding: 35px;
+    margin-top: 40px;
+    position: relative;
+    z-index: 2;
+}
+
+.admin-nav-bar {
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: #0369a1;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #bae6fd;
+    padding-bottom: 10px;
+}
+
+.admin-form-panel h3 {
+    font-size: 1.8rem;
+    color: #0c4a6e;
+    margin-bottom: 5px;
+}
+
+.admin-form-panel p {
+    color: #0369a1;
+    margin-bottom: 20px;
+}
+
+.fields-grid-14 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.fields-grid-14 input {
+    background: #ffffff;
+    border: 2px solid #1e3a8a;
+    border-radius: 20px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.confirm-pill-btn {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, #10b981, #0284c7);
+    color: #ffffff;
+    border: none;
+    padding: 14px;
+    border-radius: 30px;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.about-white-block {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 24px;
+    margin-top: 40px;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.about-white-block h2 {
+    color: #65a30d;
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.about-white-block p {
+    color: #374151;
+    line-height: 1.7;
+    font-size: 1rem;
+}
+
+/* ==========================================================================
+   PORTALS & DASHBOARDS
+   ========================================================================== */
+.olive-portal-block {
+    background-color: #556b2f;
+    padding: 30px;
+    border-radius: 24px;
+    margin: 20px;
+    color: #ffffff;
+}
+
+.large-admin-metric-card {
+    background-color: #6b8e23;
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.sliding-metrics-wrapper {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 15px;
+}
+
+.olive-metric-card {
+    min-width: 180px;
+    background-color: #3f4e25;
+    border: 2px solid #a3e635;
+    border-radius: 16px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+}
+
+.olive-metric-card:hover {
+    background-color: #4d602d;
+}
+
+.white-smart-tile {
+    background-color: #ffffff;
+    color: #1a1a1a;
+    border-radius: 20px;
+    padding: 25px;
+    margin-top: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.top-bar-logout {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #3f4e25;
+    padding: 15px 25px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.logout-btn {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active-tab {
+    display: block;
+}
+    </style>
+</head>
+<body>
+
+    <!-- ==========================================================================
+         1. LANDING & AUTHENTICATION SECTION
+         ========================================================================== -->
+    <section id="landing-section">
+        <div class="top-home-header">
+            <h1>HOME</h1>
+        </div>
+
+        <div class="hero-main-title">
+            <span class="smart-light">Smart</span>
+            <span class="way-bold">WAY</span>
+        </div>
+        
+        <p class="hero-slogan">Digital solution company</p>
+        <h2 class="digi-subtitle">Digital Register</h2>
+        <p class="digi-paragraph">Digital register is a web-based system designed to record and monitor student data to evaluate and assess scholars.</p>
+
+        <!-- Split Screen Login Form -->
+        <div class="login-split-card" id="login-card-anchor">
+            <div class="login-left-panel">
+                <h2>smart way</h2>
+                <p class="slogan">Bringing you digital solutions.</p>
+                <p class="main-msg">Digital Register<br>Smarter Control.</p>
+            </div>
+
+            <div class="login-right-panel">
+                <h3>Welcome Back!</h3>
+                <form id="login-form">
+                    <div>
+                        <label for="portal-type">Select Portal Role</label>
+                        <select id="portal-type" required>
+                            <option value="admin">Administrator Portal</option>
+                            <option value="staff">Staff / Teacher Portal</option>
+                            <option value="gate">Gate Scanner Portal</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="username">Email / Username</label>
+                        <input type="text" id="username" placeholder="Enter your username" required>
+                    </div>
+                    <div>
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit">Login to Account</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Admin Registration Section -->
+        <div class="admin-create-wrapper">
+            <div class="admin-nav-bar">
+                <span>Smart way — Administrator Registration</span>
+            </div>
+
+            <div class="admin-form-panel">
+                <h3>New School Admin? Register Below</h3>
+                <p>Create your administrator account to manage your school database</p>
+                
+                <form id="admin-register-form">
+                    <div class="fields-grid-14">
+                        <input type="text" placeholder="School Information" disabled style="background:#f0f9ff; grid-column: 1 / -1; font-weight:bold;">
+                        <input type="text" placeholder="School code (optional)">
+                        <input type="text" id="reg-school-name" placeholder="School Name / Address" required>
+                        <input type="text" placeholder="City/town" required>
+                        <input type="tel" placeholder="School phone number" required>
+                        <input type="email" id="reg-admin-email" placeholder="School email" required>
+                        <input type="text" placeholder="School days" required>
+                        
+                        <input type="text" id="reg-admin-name" placeholder="Admin Full Name" required>
+                        <input type="text" placeholder="Admin ID (optional)">
+                        <input type="tel" placeholder="Admin phone number" required>
+                        <input type="email" placeholder="Email address" required>
+                        <input type="text" id="reg-admin-user" placeholder="Username" required>
+                        <input type="password" id="reg-admin-pass" placeholder="Password" required>
+                        
+                        <button type="submit" class="confirm-pill-btn">Confirm & Launch System</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- About Information -->
+        <div class="about-white-block">
+            <h2>Smart way</h2>
+            <p>Smart Way is a Zimbabwean tech-based company founded by Blessing Chipunza and Tehila Letalo, with a mission to bring practical digital and smart solutions to the public. The company's top priority is helping Zimbabwe, and Africa more broadly, move forward confidently into the digital era by building tools that solve everyday problems for schools, businesses, and communities.</p>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+         2. ADMINISTRATOR PORTAL
+         ========================================================================== -->
+    <section id="administrator-portal" class="portal-section olive-portal-block">
+        <div class="top-bar-logout">
+            <h3>Administrator Dashboard</h3>
+            <button class="logout-btn" onclick="App.logout()">Log Out</button>
+        </div>
+
+        <header class="large-admin-metric-card">
+            <h2 id="admin-display-user">Welcome Admin</h2>
+            <span id="admin-display-school">School Name</span>
+            <p style="margin-top:10px;">"Morning Earthling! Today is a great day to monitor performance."</p>
+        </header>
+
+        <nav>
+            <div class="sliding-metrics-wrapper">
+                <div class="olive-metric-card" onclick="App.showAdminTab('tab-dash')">Dashboard</div>
+                <div class="olive-metric-card" onclick="App.showAdminTab('tab-reg-student')">Register Student</div>
+                <div class="olive-metric-card" onclick="App.showAdminTab('tab-directory')">Student Directory</div>
+                <div class="olive-metric-card" onclick="App.showAdminTab('tab-class-analysis')">Class Analysis</div>
+                <div class="olive-metric-card" onclick="App.showAdminTab('tab-faculty')">Faculty Management</div>
+            </div>
+        </nav>
+
+        <article id="tab-dash" class="white-smart-tile tab-content active-tab">
+            <h3>Overview Metrics</h3>
+            <ul style="margin-top:10px; line-height:2;">
+                <li>Total Number of Students: <strong id="metric-total-students">0</strong></li>
+                <li>Total Number of Teachers: <strong>24</strong></li>
+                <li>Attendance Rate for Students: <strong>94.2%</strong></li>
+                <li>Attendance Rate for Teachers: <strong>98.0%</strong></li>
+            </ul>
+        </article>
+
+        <article id="tab-reg-student" class="white-smart-tile tab-content">
+            <h3>Register New Student</h3>
+            <form id="student-registration-form" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
+                <input type="text" id="stud-fullname" placeholder="Student Full Name" required style="padding:10px; border-radius:10px; border:1px solid #ccc;">
+                <select id="stud-gender" style="padding:10px; border-radius:10px; border:1px solid #ccc;">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+                <input type="text" id="stud-address" placeholder="Home Address" style="padding:10px; border-radius:10px; border:1px solid #ccc;">
+                <input type="text" id="stud-guardian" placeholder="Parent/Guardian Name" style="padding:10px; border-radius:10px; border:1px solid #ccc;">
+                <input type="tel" id="stud-phone" placeholder="Guardian Phone Number" style="padding:10px; border-radius:10px; border:1px solid #ccc;">
+                <button type="submit" style="background:#65a30d; color:white; border:none; padding:12px; border-radius:20px; font-weight:bold; cursor:pointer;">Generate QR Code & Register</button>
+            </form>
+        </article>
+
+        <article id="tab-directory" class="white-smart-tile tab-content">
+            <h3>Student Directory (Form 1A)</h3>
+            <table border="1" width="100%" style="margin-top:15px; border-collapse:collapse; text-align:left;">
+                <thead>
+                    <tr style="background:#f0f0f0;">
+                        <th style="padding:8px;">Name</th>
+                        <th style="padding:8px;">Class</th>
+                        <th style="padding:8px;">Status</th>
+                        <th style="padding:8px;">Arrival Time</th>
+                    </tr>
+                </thead>
+                <tbody id="student-table-body">
+                    <!-- Loaded dynamically via Backend API -->
+                </tbody>
+            </table>
+        </article>
+
+        <article id="tab-class-analysis" class="white-smart-tile tab-content">
+            <h3>Class Performance Analytics</h3>
+            <p style="margin-top:10px;">Attendance Rate: 95%</p>
+            <p>Average late arrivals: 2 per day</p>
+        </article>
+
+        <article id="tab-faculty" class="white-smart-tile tab-content">
+            <h3>Faculty Management</h3>
+            <form id="faculty-form" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
+                <input type="text" id="staff-name" placeholder="Staff Full Name" required style="padding:10px; border-radius:10px; border:1px solid #ccc;">
+                <input type="text" id="staff-id" placeholder="Staff ID" required style="padding:10px; border-radius:10px; border:1px solid #ccc;">
+                <input type="email" id="staff-email" placeholder="Staff Email" required style="padding:10px; border-radius:10px; border:1px solid #ccc;">
+                <button type="submit" style="background:#0284c7; color:white; border:none; padding:12px; border-radius:20px; font-weight:bold; cursor:pointer;">Add Staff Member</button>
+            </form>
+        </article>
+    </section>
+
+    <!-- ==========================================================================
+         3. STAFF PORTAL
+         ========================================================================== -->
+    <section id="staff-portal" class="portal-section olive-portal-block">
+        <div class="top-bar-logout">
+            <h3>Teacher & Staff Portal</h3>
+            <button class="logout-btn" onclick="App.logout()">Log Out</button>
+        </div>
+
+        <div class="white-smart-tile">
+            <h3 id="staff-display-user">Welcome Teacher</h3>
+            <p style="margin-top:10px;">Assigned Classes: <strong>3</strong></p>
+            <p>Today's Attendance: <strong>92% Present</strong></p>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+         4. GATE SCANNER PORTAL
+         ========================================================================== -->
+    <section id="gate-scanner-portal" class="portal-section olive-portal-block">
+        <div class="top-bar-logout">
+            <h3>Gate Scanner Station</h3>
+            <button class="logout-btn" onclick="App.logout()">Log Out</button>
+        </div>
+
+        <div class="white-smart-tile" style="text-align:center;">
+            <h3>Gate Control Hub</h3>
+            <div style="display:flex; gap:15px; margin-top:20px;">
+                <button style="flex:1; background:#16a34a; color:white; border:none; padding:25px; border-radius:15px; font-weight:bold; font-size:1.2rem; cursor:pointer;" onclick="alert('Automatic Scan Mode Active')">Automatic QR Scan</button>
+                <button style="flex:1; background:#dc2626; color:white; border:none; padding:25px; border-radius:15px; font-weight:bold; font-size:1.2rem; cursor:pointer;" onclick="alert('Manual ID Search Opened')">Manual ID Scan</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p style="text-align:center; padding:20px; color:#ffffff;">Created by Blessing Chipunza, Gmail blessingyoung889@gmail.com, phone 0772773326</p>
+    </footer>
+
+    <!-- ==========================================================================
+         APP JS (INTEGRATED BACKEND API & STATE MANAGEMENT)
+         ========================================================================== -->
+    <script>
+        // Update this URL once your Render backend is live (e.g., 'https://your-app.onrender.com/api')
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? 'http://localhost:5000/api' 
+            : '/api';
+
+        const App = {
+            init: function() {
+                this.bindEvents();
+            },
+
+            bindEvents: function() {
+                // Login Form Submission
+                document.getElementById('login-form').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const role = document.getElementById('portal-type').value;
+                    const username = document.getElementById('username').value;
+                    const password = document.getElementById('password').value;
+
+                    try {
+                        const res = await fetch(`${API_URL}/login`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ role, username, password })
+                        });
+                        const data = await res.json();
+                        
+                        if (res.ok) {
+                            this.authenticateUser(role, data.user.username);
+                        } else {
+                            alert(data.error || 'Login failed');
+                        }
+                    } catch (err) {
+                        alert('Unable to connect to backend server. Make sure node server.js is running.');
+                    }
+                });
+
+                // Admin Registration Submission
+                document.getElementById('admin-register-form').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const username = document.getElementById('reg-admin-user').value;
+                    const password = document.getElementById('reg-admin-pass').value;
+                    const schoolName = document.getElementById('reg-school-name').value;
+                    const email = document.getElementById('reg-admin-email').value;
+
+                    try {
+                        const res = await fetch(`${API_URL}/register-admin`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ username, password, schoolName, email })
+                        });
+
+                        const data = await res.json();
+
+                        if (res.ok) {
+                            alert('Account registered successfully!');
+                            this.authenticateUser('admin', username, schoolName);
+                        } else {
+                            alert(data.error || 'Registration failed');
+                        }
+                    } catch (err) {
+                        alert('Error connecting to registration service.');
+                    }
+                });
+
+                // New Student Registration Submission
+                document.getElementById('student-registration-form').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const payload = {
+                        fullName: document.getElementById('stud-fullname').value,
+                        gender: document.getElementById('stud-gender').value,
+                        address: document.getElementById('stud-address').value,
+                        guardianName: document.getElementById('stud-guardian').value,
+                        guardianPhone: document.getElementById('stud-phone').value
+                    };
+
+                    try {
+                        const res = await fetch(`${API_URL}/students`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (res.ok) {
+                            alert('Student registered to MongoDB database!');
+                            document.getElementById('student-registration-form').reset();
+                            this.fetchStudents();
+                            this.showAdminTab('tab-directory');
+                        } else {
+                            alert('Failed to save student record.');
+                        }
+                    } catch (err) {
+                        alert('Server communication error.');
+                    }
+                });
+
+                // Faculty Registration Submit
+                document.getElementById('faculty-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    alert('Staff member registered successfully!');
+                    document.getElementById('faculty-form').reset();
+                });
+            },
+
+            authenticateUser: function(role, username, schoolName = 'Smart School') {
+                document.getElementById('landing-section').classList.add('auth-mode-hidden');
+                
+                if (role === 'admin') {
+                    document.getElementById('administrator-portal').classList.add('active');
+                    document.getElementById('admin-display-user').innerText = 'Welcome, ' + username;
+                    document.getElementById('admin-display-school').innerText = schoolName;
+                    this.fetchStudents(); // Load directory data on dashboard open
+                } else if (role === 'staff') {
+                    document.getElementById('staff-portal').classList.add('active');
+                    document.getElementById('staff-display-user').innerText = 'Welcome, ' + username;
+                } else if (role === 'gate') {
+                    document.getElementById('gate-scanner-portal').classList.add('active');
+                }
+            },
+
+            fetchStudents: async function() {
+                try {
+                    const res = await fetch(`${API_URL}/students`);
+                    const students = await res.json();
+                    
+                    const tbody = document.getElementById('student-table-body');
+                    tbody.innerHTML = '';
+                    
+                    if (Array.isArray(students) && students.length > 0) {
+                        students.forEach(s => {
+                            const row = document.createElement('tr');
+                            const timeStr = s.arrivalTime ? new Date(s.arrivalTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'N/A';
+                            row.innerHTML = `
+                                <td style="padding:8px;">${s.fullName}</td>
+                                <td style="padding:8px;">${s.className || 'Form 1A'}</td>
+                                <td style="padding:8px; color:green; font-weight:bold;">${s.status || 'Present'}</td>
+                                <td style="padding:8px;">${timeStr}</td>
+                            `;
+                            tbody.appendChild(row);
+                        });
+
+                        document.getElementById('metric-total-students').innerText = students.length;
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="4" style="padding:8px; text-align:center;">No students found in database.</td></tr>';
+                    }
+                } catch (err) {
+                    console.error('Failed to fetch student data:', err);
+                }
+            },
+
+            showAdminTab: function(tabId) {
+                const tabs = document.querySelectorAll('#administrator-portal .tab-content');
+                tabs.forEach(tab => tab.classList.remove('active-tab'));
+                
+                document.getElementById(tabId).classList.add('active-tab');
+            },
+
+            logout: function() {
+                const portals = document.querySelectorAll('.portal-section');
+                portals.forEach(portal => portal.classList.remove('active'));
+                
+                document.getElementById('landing-section').classList.remove('auth-mode-hidden');
+                document.getElementById('login-form').reset();
+            }
+        };
+
+        // Initialize App on DOM load
+        document.addEventListener('DOMContentLoaded', () => {
+            App.init();
+        });
+    </script>
+</body>
+</html>
+
+Key Changes:
+ * Integrated API_URL Dynamic Host: Automatically routes requests to http://localhost:5000/api during local development or to relative endpoints when hosted on a platform like Render.
+ * MongoDB Data Binding: The student directory table (student-table-body) and the overall student metric count (metric-total-students) now update in real-time from the backend database whenever a student is registered or logged in.
+ * Database Login & Registration: Forms post credentials directly to the /api/login and /api/register-admin routes created in the Express server.
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Way - Digi Register</title>
+    <style>
+/* ==========================================================================
+   GLOBAL STYLES & RESET
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: #a3e635; /* Bright neon/lime green */
+    color: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Visibility Control Classes */
+.portal-section {
+    display: none; /* Hidden until user logs in */
+}
+
+.portal-section.active {
+    display: block;
+}
+
+.auth-mode-hidden {
+    display: none !important;
+}
+
+/* ==========================================================================
+   HERO / LANDING SECTION (NEON LIME + WAVE MESH)
+   ========================================================================== */
+#landing-section {
+    position: relative;
+    background-color: #a3e635;
+    padding: 60px 40px;
+    margin: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    border-radius: 40px;
+    overflow: hidden;
+}
+
+#landing-section::before,
+#landing-section::after {
+    content: "";
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+#landing-section::before {
+    bottom: -150px;
+    left: -150px;
+    background: radial-gradient(circle, transparent 20%, rgba(255,255,255,0.2) 21%, transparent 22%),
+                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.3) 0px, rgba(255, 255, 255, 0.3) 2px, transparent 2px, transparent 12px),
+                repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.2) 0px, rgba(0, 0, 0, 0.2) 2px, transparent 2px, transparent 12px);
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    transform: rotate(15deg);
+}
+
+#landing-section::after {
+    top: -150px;
+    right: -150px;
+    background: repeating-linear-gradient(60deg, rgba(255, 255, 255, 0.4) 0px, rgba(255, 255, 255, 0.4) 1px, transparent 1px, transparent 15px),
+                repeating-linear-gradient(-30deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 15px);
+    border-radius: 50%;
+}
+
+.top-home-header {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.top-home-header h1 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #ffffff;
+    display: inline-block;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #ffffff;
+    text-transform: uppercase;
+}
+
+.hero-main-title {
+    text-align: center;
+    margin: 40px 0 20px 0;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-main-title .smart-light {
+    font-weight: 300;
+    font-size: 2.5rem;
+    color: #ffffff;
+}
+
+.hero-main-title .way-bold {
+    font-weight: 900;
+    font-size: 4.5rem;
+    color: #ffffff;
+    letter-spacing: 3px;
+    display: block;
+    line-height: 1;
+}
+
+.hero-slogan {
+    text-align: center;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 1.4rem;
+    margin-bottom: 25px;
+    position: relative;
+    z-index: 2;
+}
+
+.digi-subtitle {
+    text-align: center;
+    font-size: 1.8rem;
+    color: #111827;
+    font-weight: 800;
+    margin-top: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.digi-paragraph {
+    max-width: 700px;
+    margin: 10px auto 40px auto;
+    text-align: center;
+    font-size: 1rem;
+    color: #1f2937;
+    line-height: 1.6;
+    position: relative;
+    z-index: 2;
+}
+
+/* ==========================================================================
+   LOGIN FORM — SPLIT SCREEN
+   ========================================================================== */
+.login-split-card {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #ffffff;
+    border-radius: 30px;
+    overflow: hidden;
+    margin: 40px 0;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    position: relative;
+    z-index: 2;
+}
+
+.login-left-panel {
+    flex: 1;
+    min-width: 320px;
+    background-color: #84cc16;
+    padding: 50px 40px;
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-left-panel h2 {
+    font-size: 3rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.login-left-panel .slogan {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+.login-left-panel .main-msg {
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1.3;
+}
+
+.login-right-panel {
+    flex: 1;
+    min-width: 320px;
+    padding: 50px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-right-panel h3 {
+    color: #65a30d;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 25px;
+}
+
+.login-right-panel label {
+    font-weight: 700;
+    color: #374151;
+    margin-top: 15px;
+    display: block;
+}
+
+.login-right-panel input, .login-right-panel select {
+    width: 100%;
+    padding: 14px 20px;
+    border: 2px solid #e5e7eb;
+    border-radius: 30px;
+    margin-top: 6px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.login-right-panel button {
+    margin-top: 25px;
+    background-color: #65a30d;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* ==========================================================================
+   ADMIN ACCOUNT CREATION SECTION
+   ========================================================================== */
+.admin-create-wrapper {
+    background-color: #e0f2fe;
+    border-radius: 30px;
+    padding: 35px;
+    margin-top: 40px;
+    position: relative;
+    z-index: 2;
+}
+
+.admin-nav-bar {
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: #0369a1;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #bae6fd;
+    padding-bottom: 10px;
+}
+
+.admin-form-panel h3 {
+    font-size: 1.8rem;
+    color: #0c4a6e;
+    margin-bottom: 5px;
+}
+
+.admin-form-panel p {
+    color: #0369a1;
+    margin-bottom: 20px;
+}
+
+.fields-grid-14 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.fields-grid-14 input {
+    background: #ffffff;
+    border: 2px solid #1e3a8a;
+    border-radius: 20px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.confirm-pill-btn {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, #10b981, #0284c7);
+    color: #ffffff;
+    border: none;
+    padding: 14px;
+    border-radius: 30px;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.about-white-block {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 24px;
+    margin-top: 40px;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.about-white-block h2 {
+    color: #65a30d;
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.about-white-block p {
+    color: #374151;
+    line-height: 1.7;
+    font-size: 1rem;
+}
+
+/* ==========================================================================
+   PORTALS & DASHBOARDS
+   ========================================================================== */
+.olive-portal-block {
+    background-color: #556b2f;
+    padding: 30px;
+    border-radius: 24px;
+    margin: 20px;
+    color: #ffffff;
+}
+
+.large-admin-metric-card {
+    background-color: #6b8e23;
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.sliding-metrics-wrapper {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 15px;
+}
+
+.olive-metric-card {
+    min-width: 180px;
+    background-color: #3f4e25;
+    border: 2px solid #a3e635;
+    border-radius: 16px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+}
+
+.olive-metric-card:hover {
+    background-color: #4d602d;
+}
+
+.white-smart-tile {
+    background-color: #ffffff;
+    color: #1a1a1a;
+    border-radius: 20px;
+    padding: 25px;
+    margin-top: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.top-bar-logout {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #3f4e25;
+    padding: 15px 25px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.logout-btn {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active-tab {
+    display: block;
+}
+    </style>
+</head>
+<body>
+
+    <!-- ==========================================================================
+         1. LANDING & AUTHENTICATION SECTION
+         ========================================================================== -->
+    <section id="landing-section">
+        <div class="top-home-header">
+            <h1>HOME</h1>
+        </div>
+
+        <div class="hero-main-title">
+            <span class="smart-light">Smart</span>
+            <span class="way-bold">WAY</span>
+        </div>
+        
+        <p class="hero-slogan">Digital solution company</p>
+        <h2 class="digi-subtitle">Digital Register</h2>
+        <p class="digi-paragraph">Digital register is a web-based system designed to record and monitor student data to evaluate and assess scholars.</p>
+
+        <!-- Split Screen Login Form -->
+        <div class="login-split-card" id="login-card-anchor">
+            <div class="login-left-panel">
+                <h2>smart way</h2>
+                <p class="slogan">Bringing you digital solutions.</p>
+                <p class="main-msg">Digital Register<br>Smarter Control.</p>
+            </div>
+
+            <div class="login-right-panel">
+                <h3>Welcome Back!</h3>
+                <form id="login-form">
+                    <div>
+                        <label for="portal-type">Select Portal Role</label>
+                        <select id="portal-type" required>
+                            <option value="admin">Administrator Portal</option>
+                            <option value="staff">Staff / Teacher Portal</option>
+                            <option value="gate">Gate Scanner Portal</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="username">Email / Username</label>
+                        <input type="text" id="username" placeholder="Enter your username" required>
+                    </div>
+                    <div>
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit">Login to Account</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Admin Registration Section -->
+        <div class="admin-create-wrapper">
+            <div class="admin-nav-bar">
+                <span>Smart way — Administrator Registration</span>
+            </div>
+
+            <div class="admin-form-panel">
+                <h3>New School Admin? Register Below</h3>
+                <p>Create your administrator account to manage your school database</p>
+                
+                <form id="admin-register-form">
+                    <div class="fields-grid-14">
+                        <input type="text" placeholder="School Information" disabled style="background:#f0f9ff; grid-column: 1 / -1; font-weight:bold;">
+                        <input type="text" placeholder="School code (optional)">
+                        <input type="text" id="reg-school-name" placeholder="School Name / Address" required>
+                        <input type="text" placeholder="City/town" required>
+                        <input type="tel" placeholder="School phone number" required>
+                        <input type="email" id="reg-admin-email" placeholder="School email" required>
+                        <input type="text" placeholder="School days" required>
+                        
+                        <input type="text" id="reg-admin-name" placeholder="Admin Full Name" required>
+                        <input type="text" placeholder="Admin ID (optional)">
+                        <input type="tel" placeholder="Admin phone number" required>
+                        <input type="email" placeholder="Email address" required>
+                        <input type="text" id="reg-admin-user" placeholder="Username" required>
+                        <input type="password" id="reg-admin-pass" placeholder="Password" required>
+                        
+                        <button type="submit" class="confirm-pill-btn">Confirm & Launch System</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- About Information -->
+        <div class="about-white-block">
+            <h2>Smart way</h2>
+            <p>Smart Way is a Zimbabwean tech-based company founded by Blessing Chipunza and Tehila Letalo, with a mission to bring practical digital and smart solutions to the public. The company's top priority is helping Zimbabwe, and Africa more broadly, move forward confidently into the digital era by building tools that solve everyday problems for schools, businesses, and communities.</p>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+         2. ADMINISTRATOR PORTAL
+         ========================================================================== -->
+    <section id="administrator-portal" class="portal-section olive-portal-block">
+        <div class="top-bar-logout">
+            <h3>Administrator Dashboard</h3>
+            <button class="logout-btn" onclick="App.logout()">Log Out</button>
+        </div>
+
+        <header class="large-admin-metric-card">
+            <h2 id="admin-display-user">Welcome Admin</h2>
+            <span id="admin-display-school">School Name</span>
+            <p style="margin-top:10px;">"Morning Earthling! Today is a great day to monitor performance."</p>
+        </header>
+
+        <nav>
+            <div class="sliding-metrics-wrapper">
+                <div class="olive-metric-card" onclick="App.showAdminTab('tab-dash')">Dashboard</div>
+                <div class="olive-metric-card" onclick="App.showAdminTab('tab-reg-student')">Register Student</div>
+                <div class="olive-metric-card" onclick="App.showAdminTab('tab-directory')">Student Directory</div>
+                <div class="olive-metric-card" onclick="App.showAdminTab('tab-class-analysis')">Class Analysis</div>
+                <div class="olive-metric-card" onclick="App.showAdminTab('tab-faculty')">Faculty Management</div>
+            </div>
+        </nav>
+
+        <article id="tab-dash" class="white-smart-tile tab-content active-tab">
+            <h3>Overview Metrics</h3>
+            <ul style="margin-top:10px; line-height:2;">
+                <li>Total Number of Students: <strong id="metric-total-students">0</strong></li>
+                <li>Total Number of Teachers: <strong>24</strong></li>
+                <li>Attendance Rate for Students: <strong>94.2%</strong></li>
+                <li>Attendance Rate for Teachers: <strong>98.0%</strong></li>
+            </ul>
+        </article>
+
+        <article id="tab-reg-student" class="white-smart-tile tab-content">
+            <h3>Register New Student</h3>
+            <form id="student-registration-form" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
+                <input type="text" id="stud-fullname" placeholder="Student Full Name" required style="padding:10px; border-radius:10px; border:1px solid #ccc;">
+                <select id="stud-gender" style="padding:10px; border-radius:10px; border:1px solid #ccc;">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+                <input type="text" id="stud-address" placeholder="Home Address" style="padding:10px; border-radius:10px; border:1px solid #ccc;">
+                <input type="text" id="stud-guardian" placeholder="Parent/Guardian Name" style="padding:10px; border-radius:10px; border:1px solid #ccc;">
+                <input type="tel" id="stud-phone" placeholder="Guardian Phone Number" style="padding:10px; border-radius:10px; border:1px solid #ccc;">
+                <button type="submit" style="background:#65a30d; color:white; border:none; padding:12px; border-radius:20px; font-weight:bold; cursor:pointer;">Generate QR Code & Register</button>
+            </form>
+        </article>
+
+        <article id="tab-directory" class="white-smart-tile tab-content">
+            <h3>Student Directory (Form 1A)</h3>
+            <table border="1" width="100%" style="margin-top:15px; border-collapse:collapse; text-align:left;">
+                <thead>
+                    <tr style="background:#f0f0f0;">
+                        <th style="padding:8px;">Name</th>
+                        <th style="padding:8px;">Class</th>
+                        <th style="padding:8px;">Status</th>
+                        <th style="padding:8px;">Arrival Time</th>
+                    </tr>
+                </thead>
+                <tbody id="student-table-body">
+                    <!-- Loaded dynamically via Backend API -->
+                </tbody>
+            </table>
+        </article>
+
+        <article id="tab-class-analysis" class="white-smart-tile tab-content">
+            <h3>Class Performance Analytics</h3>
+            <p style="margin-top:10px;">Attendance Rate: 95%</p>
+            <p>Average late arrivals: 2 per day</p>
+        </article>
+
+        <article id="tab-faculty" class="white-smart-tile tab-content">
+            <h3>Faculty Management</h3>
+            <form id="faculty-form" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
+                <input type="text" id="staff-name" placeholder="Staff Full Name" required style="padding:10px; border-radius:10px; border:1px solid #ccc;">
+                <input type="text" id="staff-id" placeholder="Staff ID" required style="padding:10px; border-radius:10px; border:1px solid #ccc;">
+                <input type="email" id="staff-email" placeholder="Staff Email" required style="padding:10px; border-radius:10px; border:1px solid #ccc;">
+                <button type="submit" style="background:#0284c7; color:white; border:none; padding:12px; border-radius:20px; font-weight:bold; cursor:pointer;">Add Staff Member</button>
+            </form>
+        </article>
+    </section>
+
+    <!-- ==========================================================================
+         3. STAFF PORTAL
+         ========================================================================== -->
+    <section id="staff-portal" class="portal-section olive-portal-block">
+        <div class="top-bar-logout">
+            <h3>Teacher & Staff Portal</h3>
+            <button class="logout-btn" onclick="App.logout()">Log Out</button>
+        </div>
+
+        <div class="white-smart-tile">
+            <h3 id="staff-display-user">Welcome Teacher</h3>
+            <p style="margin-top:10px;">Assigned Classes: <strong>3</strong></p>
+            <p>Today's Attendance: <strong>92% Present</strong></p>
+        </div>
+    </section>
+
+    <!-- ===================================================================
